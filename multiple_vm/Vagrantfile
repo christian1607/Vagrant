@@ -9,20 +9,8 @@ Vagrant.configure("2") do |config|
   
    config.vm.provision "shell", inline: "echo Iniciando aprovisionamiento"
 
-  
-   config.vm.define "haproxy" do |ha|
-      ha.vm.box="centos/7"
-      ha.vm.hostname= "proxy"
-      ha.vm.network "public_network", ip: "192.168.1.90"
-      ha.vm.provider "virtualbox" do |v|
-         v.memory = 1024
-         v.cpus = 1
-      end  
-      
-      ha.vm.provision "shell", path: "ha_proxy.sh"
-    
-   end
-  
+
+   #Instalamos Web Servers - Apache
    (1..2).each do |i|
       config.vm.define "web-server-#{i}" do |web|
          web.vm.box="centos/7"
@@ -38,7 +26,20 @@ Vagrant.configure("2") do |config|
       
       end
    end   
-   
+
+   #Instalamamos HA Proxy  
+   config.vm.define "haproxy" do |ha|
+      ha.vm.box="centos/7"
+      ha.vm.hostname= "proxy"
+      ha.vm.network "public_network", ip: "192.168.1.90"
+      ha.vm.provider "virtualbox" do |v|
+         v.memory = 1024
+         v.cpus = 1
+      end  
+      
+      ha.vm.provision "shell", path: "ha_proxy.sh"
+    
+   end
 
  
 end
